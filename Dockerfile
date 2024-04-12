@@ -1,4 +1,3 @@
-# docker run -d -p 8000:8000 alseambusher/crontab-ui
 FROM alpine:3.15.3
 
 ENV   CRON_PATH /etc/crontabs
@@ -16,17 +15,28 @@ RUN   apk --no-cache add \
       nodejs \
       npm \
       supervisor \
-      tzdata
+      tzdata \
+      python3 \
+      py3-pip
+
+# Create the virtual environment
+RUN python3 -m venv /env
+
+# Activate the virtual environment
+ENV PATH="/env/bin:$PATH"
 
 COPY supervisord.conf /etc/supervisord.conf
 COPY . /crontab-ui
 
+RUN python -m pip install --upgrade pip
+RUN apk add --no-cache gcc python3-dev musl-dev linux-headers
+
+RUN pip install -r requirements.txt
+
 RUN   npm install
 
 ENV   HOST 0.0.0.0
-
 ENV   PORT 8000
-
 ENV   CRON_IN_DOCKER true
 
 EXPOSE $PORT
