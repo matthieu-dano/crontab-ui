@@ -2,4 +2,4 @@ notebook
 matplotlib
 numpy
 pandas
-openpyxl
+openpyxlma

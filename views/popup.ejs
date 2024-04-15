@@ -9,8 +9,15 @@
       <div class="modal-body" id="job-body">
 	<label>Name (Optional)</label>
 	<input type='text' class='form-control' id='job-name'/><br />
-	<label>Command</label>
+	<label>Notebook</label>
 	<input type='text' class='form-control' id='job-command' onkeyup="job_command = $(this).val(); job_string();"/><br />
+  <label>Quick output format</label><br />
+  <a class="btn btn-primary" onclick="output = '@html'; job_string();">Html</a>
+	<a class="btn btn-primary" onclick="output = '@pdf'; job_string();">PDF</a>
+	<a class="btn btn-primary" onclick="output = '@webpdf'; job_string();">WebPDF</a>
+  <a class="btn btn-primary" onclick="output = '@markdown'; job_string();">Markdown</a>
+	<a class="btn btn-primary" onclick="output = '@script'; job_string();">Executable script</a>
+	<a class="btn btn-primary" onclick="output = '@latex'; job_string();">LaTeX</a><br /><br />
 	<label>Quick Schedule</label><br />
 	<a class="btn btn-primary" onclick="schedule = '@reboot'; job_string();">Startup</a>
 	<a class="btn btn-primary" onclick="schedule = '@hourly'; job_string();">Hourly</a>

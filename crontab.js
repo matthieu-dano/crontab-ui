@@ -1,23 +1,30 @@
 /*jshint esversion: 6*/
-//load database
-var Datastore = require('nedb');
-var path = require("path");
+// Load database
+const Datastore = require('nedb');
+const path = require("path");
 
-exports.db_folder = process.env.CRON_DB_PATH === undefined ? path.join(__dirname,  "crontabs") : process.env.CRON_DB_PATH;
+// Set database folder based on environment variable or default to 'crontabs' in the current directory
+exports.db_folder = process.env.CRON_DB_PATH === undefined ? path.join(__dirname, "crontabs") : process.env.CRON_DB_PATH;
 console.log("Cron db path: " + exports.db_folder);
+
+// Define paths for various database files and folders
 exports.log_folder = path.join(exports.db_folder, 'logs');
-exports.env_file =  path.join(exports.db_folder, 'env.db');
+exports.env_file = path.join(exports.db_folder, 'env.db');
 exports.crontab_db_file = path.join(exports.db_folder, 'crontab.db');
 
-var db = new Datastore({ filename: exports.crontab_db_file});
-var cronPath = "/tmp";
-if(process.env.CRON_PATH !== undefined) {
-	console.log(`Path to crond files set using env variables ${process.env.CRON_PATH}`);
-	cronPath = process.env.CRON_PATH;
+// Initialize the NeDB datastore
+const db = new Datastore({ filename: exports.crontab_db_file });
+
+let cronPath = ""; // Default empty path
+// Set cronPath if environment variable CRON_PATH is defined
+if (process.env.CRON_PATH !== undefined) {
+    console.log(`Path to crond files set using env variables ${process.env.CRON_PATH}`);
+    cronPath = process.env.CRON_PATH;
 }
 
+// Load the NeDB database
 db.loadDatabase(function (err) {
-	if (err) throw err; // no hope, just terminate
+    if (err) throw err; // If error occurs while loading database, terminate the application
 });
 
 var exec = require('child_process').exec;
