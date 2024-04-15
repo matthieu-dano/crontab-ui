@@ -7,3 +7,4 @@ services:
     network_mode: bridge
     ports:
       - 8000:8000
+

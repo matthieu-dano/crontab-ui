@@ -13,7 +13,7 @@
     "cron-parser": "latest",
     "cronstrue": "latest",
     "ejs": "latest",
-    "express": "latest",
+    "express": "^4.19.2",
     "express-basic-auth": "^1.2.0",
     "mime-types": "latest",
     "moment": "latest",
