@@ -144,7 +144,7 @@ app.get(routes.crontab, function(req, res, next) {
 });
 
 // backup crontab db
-app.get(routes.backup, function(req, res) {
+app.get(routes.backup, function(req, res, next) {
 	crontab.backup((err) => {
 		if (err) next(err);
 		else res.end();
@@ -152,7 +152,7 @@ app.get(routes.backup, function(req, res) {
 });
 
 // This renders the restore page similar to backup page
-app.get(routes.restore, function(req, res) {
+app.get(routes.restore, function(req, res,) {
 	// get all the crontabs
 	restore.crontabs(req.query.db, function(docs){
 		res.render('restore', {
