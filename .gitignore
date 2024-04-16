@@ -3,3 +3,8 @@ node_modules
 crontabs/*.db
 crontabs/logs/*.log
 myenv
+supervisord.log
+supervisord.pid
+app-log/*
+etc-crontabs/*
+notebooks/*

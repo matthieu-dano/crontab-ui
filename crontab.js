@@ -243,14 +243,24 @@ exports.get_backup_names = function(){
 };
 
 exports.backup = (callback) => {
-	fs.copyFile(exports.crontab_db_file, path.join(exports.db_folder, 'backup ' + (new Date()).toString().replace("+", " ") + '.db'), (err) => {
-		if (err) {
-			console.error(err);
-			return callback(err);
-		}
-		callback();
-	});
+    // Assuming the crontab file is named 'crontab' and is located in the project root
+    const sourceFile = path.join(__dirname, 'crontab');
+    // Construct the destination file path with a timestamp
+    const destinationFile = path.join(__dirname, 'backups', 'backup ' + (new Date()).toString().replace("+", " ") + '.db');
+
+    // Ensure the backup directory exists
+    fs.mkdirSync(path.join(__dirname, 'backups'), { recursive: true });
+
+    fs.copyFile(sourceFile, destinationFile, (err) => {
+        if (err) {
+            console.error(err);
+            return callback(err);
+        }
+        console.log(`Crontab file was copied to ${destinationFile}`);
+        callback();
+    });
 };
+
 
 exports.restore = function(db_name){
 	fs.createReadStream(path.join(exports.db_folder, db_name)).pipe(fs.createWriteStream(exports.crontab_db_file));

@@ -5,5 +5,10 @@ services:
     build: .
     image: alseambusher/crontab-ui
     network_mode: bridge
+    privileged: true
+    volumes:
+      - "./:/crontab-ui:z"
+      - "./app-log:/var/log:z"
+      - "./etc-crontabs:/etc/crontabs:z"
     ports:
       - 8000:8000

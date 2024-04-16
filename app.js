@@ -144,12 +144,26 @@ app.get(routes.crontab, function(req, res, next) {
 });
 
 // backup crontab db
-app.get(routes.backup, function(req, res, next) {
-	crontab.backup((err) => {
-		if (err) next(err);
-		else res.end();
-	});
-});
+exports.backup = (callback) => {
+    const sourceFile = exports.crontab_db_file;
+    const destinationFile = path.join(exports.db_folder, 'backup ' + (new Date()).toString().replace("+", " ") + '.db');
+
+    fs.access(sourceFile, fs.constants.F_OK, (err) => {
+        if (err) {
+            console.error(`Source file does not exist: ${sourceFile}`);
+            return callback(err);
+        }
+
+        fs.copyFile(sourceFile, destinationFile, (err) => {
+            if (err) {
+                console.error(err);
+                return callback(err);
+            }
+            callback();
+        });
+    });
+};
+
 
 // This renders the restore page similar to backup page
 app.get(routes.restore, function(req, res,) {

@@ -1,15 +1,12 @@
-FROM alpine:3.15.3
+FROM alpine:3.18
 
-ENV   CRON_PATH /etc/crontabs
+ENV CRON_PATH /etc/crontabs
 
-RUN   mkdir /crontab-ui; touch $CRON_PATH/root; chmod +x $CRON_PATH/root
+RUN mkdir /crontab-ui; touch $CRON_PATH/root; chmod +x $CRON_PATH/root
 
 WORKDIR /crontab-ui
 
-LABEL maintainer "@alseambusher"
-LABEL description "Crontab-UI docker"
-
-RUN   apk --no-cache add \
+RUN apk --no-cache add \
       wget \
       curl \
       nodejs \
@@ -19,25 +16,27 @@ RUN   apk --no-cache add \
       python3 \
       py3-pip
 
+COPY supervisord.conf /etc/supervisord.conf
+COPY . /crontab-ui
+
 # Create the virtual environment
 RUN python3 -m venv /env
 
 # Activate the virtual environment
 ENV PATH="/env/bin:$PATH"
 
-COPY supervisord.conf /etc/supervisord.conf
-COPY . /crontab-ui
-
 RUN python -m pip install --upgrade pip
 RUN apk add --no-cache gcc python3-dev musl-dev linux-headers
 
-RUN pip install -r requirements.txt
+RUN apk add texlive-full
 
-RUN   npm install
+#RUN pip install -r requirements.txt
 
-ENV   HOST 0.0.0.0
-ENV   PORT 8000
-ENV   CRON_IN_DOCKER true
+#RUN npm install
+
+ENV HOST 0.0.0.0
+ENV PORT 8000
+ENV CRON_IN_DOCKER true
 
 EXPOSE $PORT
 
